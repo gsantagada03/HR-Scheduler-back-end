@@ -16,7 +16,7 @@ public class AdminConfiguration implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		if(adminRepository.count() == 0) {
-			Admin admin = new Admin("admin", "admin");
+			Admin admin = new Admin();
 			adminRepository.save(admin);
 		}
 	}

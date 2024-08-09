@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
+
 import java.time.LocalDate;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,14 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Contract {
 
 	@Id
@@ -33,5 +30,47 @@ public class Contract {
 	
 	@OneToOne
 	private Employee employee;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getContractType() {
+		return contractType;
+	}
+
+	public void setContractType(String contractType) {
+		this.contractType = contractType;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	
+	
 	
 }
