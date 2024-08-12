@@ -19,14 +19,14 @@ public class Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 
 	@Column(nullable = false)
-	private String role = "ADMIN";
-	
+	private String role;
+
 	@Column(nullable = false)
 	private String username;
-	
+
 	@Column(nullable = false)
 	private String password;
 
@@ -61,7 +61,5 @@ public class Admin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
 
 }
