@@ -17,23 +17,25 @@ public class AdminService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	public void changePassword(String password) {
+	public boolean changePassword(String newPassword) {
+		final String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
 		Optional<Admin> admin = adminRepository.findByUsername("admin");
 		if(admin.isPresent()) {
 			Admin adminObj = admin.get();
-			if(password != null) {
-				adminObj.setPassword(passwordEncoder.encode(password));
+			if(newPassword.matches(passwordRegex)) {
+				adminObj.setPassword(passwordEncoder.encode(newPassword));
 				adminRepository.save(adminObj);
+				return true;
 			}
 		}
+		return false;
 	}
 
-	public boolean isFirstLogin(String password ) {
+	public boolean isFirstLogin() {
 		Optional<Admin> admin = adminRepository.findByUsername("admin");
 		if(admin.isPresent()) {
 			Admin adminObj = admin.get();
 			if(passwordEncoder.matches("admin", adminObj.getPassword())) { 
-				changePassword(password);
 				return true;
 			}
 		}
