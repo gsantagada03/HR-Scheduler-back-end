@@ -9,5 +9,4 @@ import com.example.demo.model.Admin;
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
 	Optional<Admin> findByUsername(String username);
-	
 }

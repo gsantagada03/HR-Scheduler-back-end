@@ -14,7 +14,10 @@ public class HR {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@Column(nullable = true)
+	private String imagePath;
+
 	@Column(nullable = false)
 	private String role = "HR";
 
@@ -24,11 +27,14 @@ public class HR {
 	@Column(nullable = false)
 	private String lastName;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String username;
 
 	@Column(nullable = false)
 	private String password;
+
+	@Column(nullable = true, unique = true)
+	private String phoneNumber;
 
 	public Long getId() {
 		return id;
@@ -36,6 +42,14 @@ public class HR {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public String getRole() {
@@ -78,6 +92,13 @@ public class HR {
 		this.password = password;
 	}
 
-	
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 
 }
