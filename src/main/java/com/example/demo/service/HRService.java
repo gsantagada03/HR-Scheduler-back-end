@@ -1,9 +1,14 @@
 package com.example.demo.service;
 
 import java.awt.Image;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Optional;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,7 +45,7 @@ public class HRService {
 	}
 
 
-	public boolean registerHR(String name, String surname, String username, String password, @Nullable String phone, @Nullable MultipartFile file) throws Exception {
+	public boolean registerHR(String name, String surname, String username, String password, @Nullable String phone, @Nullable MultipartFile image) throws Exception {
 		final String usernameRegex = "^[A-Za-z][A-Za-z0-9_]{7,29}$";
 		final String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
 
@@ -70,21 +75,35 @@ public class HRService {
 		hr.setUsername(username);
 		hr.setPassword(passwordEncoder.encode(password));
 		hr.setPhoneNumber(phone);
-
-		byte[] imageProfile = saveProfilePicture(hr, file);
-		hr.setProfilePicture(imageProfile);
-
+		saveProfilePicture(hr, image);
 		hrRepository.save(hr);
+
 		return true;
 	}
 
 
 	public byte[] saveProfilePicture(HR hr, MultipartFile image) throws IOException {
-		if(image != null && !image.isEmpty()) {
-			byte[] imageBytes = image.getBytes();
-			return imageBytes;
+		String directory = "src/main/resources/static/profile images/";
+
+		if (image != null && !image.isEmpty()) {
+			String fileName = image.getOriginalFilename();
+			File file = new File(directory + fileName);
+
+
+			try (FileOutputStream outputStream = new FileOutputStream(file)) {
+				outputStream.write(image.getBytes());
+			}
+			hr.setProfilePicture(image.getBytes());
+			hr.setImageType(image.getContentType());
+			return image.getBytes();
+
+		} else {
+			InputStream defaultImageStream = getClass().getResourceAsStream("/static/profile images/img_avatar.png");
+			byte[] defaultImageBytes = defaultImageStream.readAllBytes();
+			hr.setProfilePicture(defaultImageBytes);
+			hr.setImageType("png");
+			return defaultImageBytes;
 		}
-		return null;
 	}
 }
 

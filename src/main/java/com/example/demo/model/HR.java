@@ -17,8 +17,11 @@ public class HR {
 	private Long id;
 
 	@Lob
-	@Column(nullable = true, columnDefinition = "LONGBLOB")
+	@Column(nullable = false, columnDefinition = "LONGBLOB")
 	private byte[] profilePicture;
+	
+	@Column(nullable = false)
+	private String imageType;
 
 	@Column(nullable = false)
 	private String role = "HR";
@@ -52,6 +55,14 @@ public class HR {
 
 	public void setProfilePicture(byte[] profilePicture) {
 		this.profilePicture = profilePicture;
+	}
+	
+	public String getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(String imageType) {
+		this.imageType = imageType;
 	}
 
 	public String getRole() {

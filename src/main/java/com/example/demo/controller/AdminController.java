@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.demo.HrSchedulerApplication;
 import com.example.demo.model.HR;
 import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.HRRepository;
@@ -34,6 +37,8 @@ import com.example.demo.webtoken.JwtService;
 import com.example.demo.webtoken.LoginForm;
 
 import io.micrometer.common.lang.Nullable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -77,7 +82,7 @@ public class AdminController {
 			@RequestPart("username") String username,
 			@RequestPart("password") String password,
 			@RequestPart("phone") @Nullable String phone,
-			@RequestPart("image") @Nullable MultipartFile file) throws Exception {
+			@RequestPart("image") @Nullable MultipartFile image) throws Exception {
 		
 		if(hrService.HrExistsByUsername(username)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -87,7 +92,7 @@ public class AdminController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(Collections.singletonMap("phoneExistsError", "Numero di telefono già esistente"));}
 
-		boolean isRegistered =  hrService.registerHR(name, surname, username, password, phone, file);
+		boolean isRegistered =  hrService.registerHR(name, surname, username, password, phone, image);
 	
 		if (isRegistered) {
 			return ResponseEntity.ok(Collections.singletonMap("redirect", "/home-admin"));
@@ -96,6 +101,25 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(Collections.singletonMap("error", "Errore nella registrazione dell'HR manager"));
 	}
+	
+	@GetMapping("/admin/get-all-HRs")
+	public ResponseEntity<?> getAllHrs() {
+		List<HR> hrList = hrRepository.findAll();
+		List <Map<String, String>> response = new ArrayList();
+		for (HR hr : hrList) {
+			Map<String, String> hrMap = new HashMap<>();
+            String base64Image = Base64.getEncoder().encodeToString(hr.getProfilePicture());
+            hrMap.put("image", base64Image);
+            hrMap.put("imageType", hr.getImageType());
+			hrMap.put("name", hr.getFirstName());
+			hrMap.put("surname", hr.getLastName());
+			hrMap.put("username", hr.getUsername());
+			hrMap.put("phone", hr.getPhoneNumber());
+			response.add(hrMap);
+		}
+		return ResponseEntity.ok(response);
+	}
+	
 
 
 	@PutMapping("/admin/change-password")
