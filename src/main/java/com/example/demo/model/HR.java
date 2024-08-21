@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class HR {
@@ -15,8 +16,9 @@ public class HR {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = true)
-	private String imagePath;
+	@Lob
+	@Column(nullable = true, columnDefinition = "LONGBLOB")
+	private byte[] profilePicture;
 
 	@Column(nullable = false)
 	private String role = "HR";
@@ -43,13 +45,13 @@ public class HR {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getImagePath() {
-		return imagePath;
+	
+	public byte[] getProfilePicture() {
+		return profilePicture;
 	}
 
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
+	public void setProfilePicture(byte[] profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 	public String getRole() {

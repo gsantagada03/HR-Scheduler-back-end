@@ -53,56 +53,11 @@ public class AdminService {
 		return false;
 	}
 
-	public boolean HrExistsByUsername(String username) {
-		if(hrRepository.existsByUsername(username)) {
-			return true;
-		}
-		return false;
-	}
+	
 
-
-	public boolean HrExistsByPhoneNumber(String phoneNumber) {
-		if(hrRepository.existsByPhoneNumber(phoneNumber)) {
-			return true;
-		}
-		return false;
-	}
-
-
-	public boolean registerHR(HR hr) throws Exception {
-		final String usernameRegex = "^[A-Za-z][A-Za-z0-9_]{7,29}$";
-		final String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
-
-		if(HrExistsByUsername(hr.getUsername())) {
-			return false;
-		}
-
-		if(HrExistsByPhoneNumber(hr.getPhoneNumber())) {
-			return false;
-		}
-
-		if(hr.getFirstName() != null && hr.getLastName()!= null && hr.getUsername() != null && hr.getPassword() !=null) {
-			if(hr.getUsername().matches(usernameRegex) && hr.getPassword().matches(passwordRegex)) {
-				hr.setPassword(passwordEncoder.encode(hr.getPassword()));
-				hrRepository.save(hr);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public String saveImage( MultipartFile imageFile) throws Exception {
-		String folder = "/photos";
-		Path uploadPath = Paths.get(folder);
-
-		if(!Files.exists(uploadPath)){
-			Files.createDirectories(uploadPath);
-		}
-
-		String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
-		Path filePath = uploadPath.resolve(fileName);
-		Files.write(filePath, imageFile.getBytes());
-
-		return fileName;
-	}
 }
+
+
+
+
+
