@@ -38,7 +38,7 @@ public class HR {
 	@Column(nullable = false)
 	private String password;
 
-	@Column(nullable = true, unique = true)
+	@Column(nullable = true)
 	private String phoneNumber;
 
 	public Long getId() {

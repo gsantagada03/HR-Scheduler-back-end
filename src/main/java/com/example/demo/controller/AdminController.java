@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -95,7 +96,7 @@ public class AdminController {
 		boolean isRegistered =  hrService.registerHR(name, surname, username, password, phone, image);
 	
 		if (isRegistered) {
-			return ResponseEntity.ok(Collections.singletonMap("redirect", "/home-admin"));
+		    return ResponseEntity.ok(Collections.singletonMap("successMessage" , "Account registrato con successo"));
 		} 
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -130,6 +131,15 @@ public class AdminController {
 		}else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errore nel cambio password");
 		}
+	}
+	
+	@DeleteMapping("/admin/delete-HR")
+	public ResponseEntity<?> deleteHR (@RequestBody Map <String, String> request){
+		String username = request.get("username");
+		if(hrService.deleteHrAccount(username)) {
+		    return ResponseEntity.ok(Collections.singletonMap("successMessage" , "Account eliminato con successo"));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("errore nell'eliminazione dell'account");
 	}
 
 

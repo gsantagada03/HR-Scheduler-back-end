@@ -12,4 +12,5 @@ public interface HRRepository extends JpaRepository<HR, Long> {
 	Optional<HR> findByUsername(String username);
 	boolean existsByPhoneNumber(String phoneNumber);
 	boolean existsByUsername(String username);
+	
 }
